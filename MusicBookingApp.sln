@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBookingApp.Domain", "MusicBookingApp.Domain\MusicBookingApp.Domain.csproj", "{6A80FF28-D843-413E-9F37-50D4DDA24D20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{AA4F5C56-2351-4476-BDF3-F4BEDA66107C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{8CBCD347-6B6B-4F18-BE12-CEAEAEF3849B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBookingApp.Persistence", "MusicBookingApp.Persistence\MusicBookingApp.Persistence.csproj", "{8FFDC719-14C1-400E-9341-D4C0CB18CC0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBookingApp.Application", "MusicBookingApp.Application\MusicBookingApp.Application.csproj", "{D01CD949-498F-403F-913F-75D6043F7A84}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{30C552EF-B48A-4285-857F-FF133A6E361D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MusicBookingApp.WebAPI", "MusicBookingApp.WebAPI\MusicBookingApp.WebAPI.csproj", "{7A64F575-2901-42A7-8294-A33CCE4D80DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A80FF28-D843-413E-9F37-50D4DDA24D20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A80FF28-D843-413E-9F37-50D4DDA24D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A80FF28-D843-413E-9F37-50D4DDA24D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A80FF28-D843-413E-9F37-50D4DDA24D20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FFDC719-14C1-400E-9341-D4C0CB18CC0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FFDC719-14C1-400E-9341-D4C0CB18CC0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FFDC719-14C1-400E-9341-D4C0CB18CC0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FFDC719-14C1-400E-9341-D4C0CB18CC0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D01CD949-498F-403F-913F-75D6043F7A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D01CD949-498F-403F-913F-75D6043F7A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D01CD949-498F-403F-913F-75D6043F7A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D01CD949-498F-403F-913F-75D6043F7A84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A64F575-2901-42A7-8294-A33CCE4D80DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A64F575-2901-42A7-8294-A33CCE4D80DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A64F575-2901-42A7-8294-A33CCE4D80DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A64F575-2901-42A7-8294-A33CCE4D80DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6A80FF28-D843-413E-9F37-50D4DDA24D20} = {AA4F5C56-2351-4476-BDF3-F4BEDA66107C}
+		{8FFDC719-14C1-400E-9341-D4C0CB18CC0C} = {8CBCD347-6B6B-4F18-BE12-CEAEAEF3849B}
+		{D01CD949-498F-403F-913F-75D6043F7A84} = {AA4F5C56-2351-4476-BDF3-F4BEDA66107C}
+		{7A64F575-2901-42A7-8294-A33CCE4D80DF} = {30C552EF-B48A-4285-857F-FF133A6E361D}
+	EndGlobalSection
+EndGlobal
