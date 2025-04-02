@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicBookingApp.Application.Dto;
@@ -12,6 +13,7 @@ namespace MusicBookingApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
@@ -26,8 +28,15 @@ namespace MusicBookingApp.WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> ProcessPayment([FromBody] PaymentRequestDto request)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<PaymentRequestDto>(false, 400, "Validation failed.", null));
+            }
+
             var paymentUrl = await _paymentService.ProcessPaymentAsync(request.BookingId, request.Amount, request.Email);
             return Ok(new ApiResponse<string>(true, 200, "Payment initiated successfully.", paymentUrl));
         }

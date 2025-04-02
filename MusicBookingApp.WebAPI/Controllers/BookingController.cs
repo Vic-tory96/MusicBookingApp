@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicBookingApp.Application.Dto;
@@ -10,6 +11,7 @@ namespace MusicBookingApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BookingController : ControllerBase
     {
         private readonly IBookingService _bookingService;
@@ -30,11 +32,20 @@ namespace MusicBookingApp.WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateBooking([FromBody] BookingDto bookingDto)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<BookingDto>(false, 400, "Validation failed.", null));
+            }
+
             var booking = await _bookingService.CreateBookingAsync(bookingDto.UserId, bookingDto.EventId);
             if (booking == null)
+            {
                 return BadRequest(new ApiResponse<BookingDto>(false, 400, "Booking failed. User may have already booked this event.", null));
+            }
 
             var bookingDtoResponse = _mapper.Map<BookingDto>(booking);
             return Ok(new ApiResponse<BookingDto>(true, 201, "Booking created successfully.", bookingDtoResponse));
@@ -43,13 +54,21 @@ namespace MusicBookingApp.WebAPI.Controllers
         [HttpPut("{bookingId}")]
         public async Task<IActionResult> UpdateBooking(string bookingId, [FromBody] BookingDto bookingDto)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<BookingDto>(false, 400, "Validation failed.", null));
+            }
+
             // Map the incoming BookingDto to the Booking entity
             var updatedBooking = _mapper.Map<Booking>(bookingDto);
 
             var updatedBookingEntity = await _bookingService.UpdateBookingAsync(bookingId, updatedBooking);
 
             if (updatedBookingEntity == null)
+            {
                 return NotFound(new ApiResponse<BookingDto>(false, 404, "Booking not found.", null));
+            }
 
             // Map the updated entity to the BookingDto for the response
             var updatedBookingDto = _mapper.Map<BookingDto>(updatedBookingEntity);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MusicBookingApp.Domain.Common;
+using MusicBookingApp.Domain.Enum;
 
 namespace MusicBookingApp.Domain.Entities
 {
@@ -14,6 +15,8 @@ namespace MusicBookingApp.Domain.Entities
         public Event Event { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
+
+        public BookingStatus BookingStatus {  get; set; }
         public string PaymentId { get; set; }  // Foreign key to Payment
         public Payment Payment { get; set; }
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;

@@ -8,9 +8,9 @@ namespace MusicBookingApp.Domain.Enum
 {
     public enum PaymentStatus
     {
-        Pending,
-        Completed,
-        Failed,
-        Refunded
+        Pending = 0,
+        Completed = 1,
+        Failed = 2,
+        Refunded = 3
     }
 }

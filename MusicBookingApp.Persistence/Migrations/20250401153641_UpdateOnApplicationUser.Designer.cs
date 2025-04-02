@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicBookingApp.Persistence.DBContext;
 
@@ -11,9 +12,11 @@ using MusicBookingApp.Persistence.DBContext;
 namespace MusicBookingApp.Persistence.Migrations
 {
     [DbContext(typeof(MusicBookingDbContext))]
-    partial class MusicBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250401153641_UpdateOnApplicationUser")]
+    partial class UpdateOnApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -253,10 +256,6 @@ namespace MusicBookingApp.Persistence.Migrations
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("BookingStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("EventId")
                         .HasColumnType("nvarchar(450)");
 
@@ -314,13 +313,11 @@ namespace MusicBookingApp.Persistence.Migrations
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentMethod")
+                        .HasColumnType("int");
 
-                    b.Property<string>("PaymentStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<string>("TransactionId")
                         .HasColumnType("nvarchar(max)");

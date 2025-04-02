@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicBookingApp.Application.Dto;
@@ -10,6 +11,7 @@ namespace MusicBookingApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ArtistController : ControllerBase
     {
         private readonly IArtistService _artistService;
@@ -20,7 +22,7 @@ namespace MusicBookingApp.WebAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("ListAll")]
         public async Task<IActionResult> GetAllArtists()
         {
             var artists = await _artistService.GetAllArtistsAsync();
@@ -39,12 +41,20 @@ namespace MusicBookingApp.WebAPI.Controllers
             return Ok(new ApiResponse<ArtistDto>(true, 200, "Artist retrieved successfully.", artistDto));
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateArtist([FromBody] ArtistDto artistDto)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<ArtistDto>(false, 400, "Validation failed.", null));
+            }
+
             var artist = _mapper.Map<Artist>(artistDto);
             var createdArtist = await _artistService.CreateArtistAsync(artist);
             var createdArtistDto = _mapper.Map<ArtistDto>(createdArtist);
+
             return CreatedAtAction(nameof(GetArtistById), new { id = createdArtist.Id }, new ApiResponse<ArtistDto>(true, 201, "Artist created successfully.", createdArtistDto));
         }
 
@@ -52,10 +62,19 @@ namespace MusicBookingApp.WebAPI.Controllers
         [HttpPut("{artistId}")]
         public async Task<IActionResult> UpdateArtist(string id, [FromBody] ArtistDto artistDto)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<ArtistDto>(false, 400, "Validation failed.", null));
+            }
+
             var artist = _mapper.Map<Artist>(artistDto);
             var updatedArtist = await _artistService.UpdateArtistAsync(id, artist);
+
             if (updatedArtist == null)
+            {
                 return NotFound(new ApiResponse<ArtistDto>(false, 404, "Artist not found.", null));
+            }
 
             var updatedArtistDto = _mapper.Map<ArtistDto>(updatedArtist);
             return Ok(new ApiResponse<ArtistDto>(true, 200, "Artist updated successfully.", updatedArtistDto));

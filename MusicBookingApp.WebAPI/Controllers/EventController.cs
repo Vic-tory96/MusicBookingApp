@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MusicBookingApp.Application.Dto;
@@ -10,6 +11,7 @@ namespace MusicBookingApp.WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EventController : ControllerBase
     {
         private readonly IEventService _eventService;
@@ -41,8 +43,15 @@ namespace MusicBookingApp.WebAPI.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> CreateEvent([FromBody] EventDto eventDto)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<EventDto>(false, 400, "Validation failed.", null));
+            }
+
             var eventEntity = _mapper.Map<Event>(eventDto);
             var createdEvent = await _eventService.CreateEventAsync(eventEntity);
             var createdEventDto = _mapper.Map<EventDto>(createdEvent);
@@ -53,6 +62,12 @@ namespace MusicBookingApp.WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEvent(string id, [FromBody] EventDto eventDto)
         {
+            // Automatically validated by FluentValidation
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ApiResponse<EventDto>(false, 400, "Validation failed.", null));
+            }
+
             var eventEntity = _mapper.Map<Event>(eventDto);
             var updatedEvent = await _eventService.UpdateEventAsync(id, eventEntity);
             if (updatedEvent == null)
@@ -61,6 +76,7 @@ namespace MusicBookingApp.WebAPI.Controllers
             var updatedEventDto = _mapper.Map<EventDto>(updatedEvent);
             return Ok(new ApiResponse<EventDto>(true, 200, "Event updated successfully.", updatedEventDto));
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(string id)
         {

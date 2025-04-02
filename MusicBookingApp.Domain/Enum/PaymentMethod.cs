@@ -8,10 +8,10 @@ namespace MusicBookingApp.Domain.Enum
 {
     public enum PaymentMethod
     {
-        CreditCard,
-        DebitCard,
-        PayPal,
-        BankTransfer,
-        Cash
+        CreditCard = 0,
+        DebitCard = 1,
+        Flutterwave = 2,
+        BankTransfer = 3,
+        Cash = 4
     }
 }

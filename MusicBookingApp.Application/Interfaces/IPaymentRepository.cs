@@ -8,7 +8,7 @@ using MusicBookingApp.Domain.Enum;
 
 namespace MusicBookingApp.Application.Interfaces
 {
-    public interface IPaymentRepository
+    public interface IPaymentRepository : IRepository<Payment>
     {
         Task<Payment> CreatePaymentAsync(Payment payment);
         Task<Payment?> GetPaymentByBookingIdAsync(string bookingId);

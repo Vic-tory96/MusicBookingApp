@@ -30,7 +30,7 @@ namespace MusicBookingApp.Application.Mappings
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.Date))
                 .ForMember(dest => dest.Location, opt => opt.MapFrom(src => src.Location))
-                .ForMember(dest => dest.ArtistId, opt => opt.MapFrom(src => src.Artist.Id));
+               .ForMember(dest => dest.ArtistId, opt => opt.MapFrom(src => src.Artist != null ? src.Artist.Id : src.ArtistId));
 
             CreateMap<EventDto, Event>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))

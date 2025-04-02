@@ -15,7 +15,7 @@ namespace MusicBookingApp.Persistence.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Booking>> GetBookingsByUserIdAsync(string userId)
+        public async Task<ICollection<Booking>> GetBookingsByUserIdAsync(string userId)
         {
             return await _context.Bookings
                   .Where(b => b.UserId == userId)

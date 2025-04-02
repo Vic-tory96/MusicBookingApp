@@ -38,8 +38,25 @@ namespace MusicBookingApp.Persistence.Services
 
         public async Task<string> ProcessPaymentAsync(string bookingId, decimal amount, string email)
         {
+            var existingPayment = await _paymentRepository.GetPaymentByBookingIdAsync(bookingId);
+            if (existingPayment != null)
+            {
+                throw new Exception("A payment has already been initiated for this booking.");
+            }
+
             var transactionRef = Guid.NewGuid().ToString();
+
+            var booking = await _bookingRepository.GetByIdAsync(bookingId);
+            if (booking == null)
+            {
+                throw new Exception("Booking not found.");
+            }
+
             var paymentLink = await _flutterwaveService.InitializePaymentAsync(amount, email, transactionRef);
+            if (string.IsNullOrEmpty(paymentLink))
+            {
+                throw new Exception("Failed to generate payment link.");
+            }
 
             var payment = new Payment
             {
@@ -51,35 +68,45 @@ namespace MusicBookingApp.Persistence.Services
             };
 
             await _paymentRepository.CreatePaymentAsync(payment);
+
+            // Update the Booking with PaymentId
+            var getBooking = await _bookingRepository.GetByIdAsync(bookingId);
+            if (getBooking != null)
+            {
+                getBooking.PaymentId = payment.Id;
+                await _bookingRepository.UpdateAsync(booking);
+            }
+
             return paymentLink;
         }
-
-        //public async Task<Payment> ProcessPaymentAsync(string bookingId, decimal amount, PaymentMethod paymentMethod)
-        //{
-        //    var booking = await _bookingRepository.GetByIdAsync(bookingId);
-        //    if (booking == null)
-        //        throw new Exception("Booking not found.");
-
-        //    var payment = new Payment
-        //    {
-        //        BookingId = bookingId,
-        //        Amount = amount,
-        //        PaymentMethod = paymentMethod,
-        //        PaymentStatus = PaymentStatus.Pending,
-        //        TransactionId = Guid.NewGuid().ToString(),
-        //        PaymentDate = DateTime.UtcNow
-        //    };
-
-        //    return await _paymentRepository.CreatePaymentAsync(payment);
-        //}
-
+       
         public async Task<bool> UpdatePaymentStatusAsync(string transactionId, PaymentStatus newStatus)
         {
             var payment = await _paymentRepository.GetPaymentByTransactionIdAsync(transactionId);
             if (payment == null) return false;
 
-            await _paymentRepository.UpdatePaymentStatusAsync(payment.Id, newStatus);
+            payment.PaymentStatus = newStatus;
+            await _paymentRepository.UpdateAsync(payment);
+
+            // If payment is successful, update the booking status
+            if (newStatus == PaymentStatus.Completed)
+            {
+                var booking = await _bookingRepository.GetByIdAsync(payment.BookingId);
+                if (booking != null)
+                {
+                    booking.BookingStatus = BookingStatus.Confirmed;
+                    await _bookingRepository.UpdateAsync(booking);
+                }
+            }
+
             return true;
         }
+
+        // How everything works
+        // User books an event - Booking records as "Pending"
+        // User initiate Payment - Payment is recorded as "Pending"
+        //User complete payment on Flutterwave
+        //Flutterwave  sends Callback - API update payment to "Completed"
+        //API updates Booking to "Confirmed".
     }
 }

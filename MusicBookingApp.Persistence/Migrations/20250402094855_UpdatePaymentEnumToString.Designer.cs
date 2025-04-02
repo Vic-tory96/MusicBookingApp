@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MusicBookingApp.Persistence.DBContext;
 
@@ -11,9 +12,11 @@ using MusicBookingApp.Persistence.DBContext;
 namespace MusicBookingApp.Persistence.Migrations
 {
     [DbContext(typeof(MusicBookingDbContext))]
-    partial class MusicBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250402094855_UpdatePaymentEnumToString")]
+    partial class UpdatePaymentEnumToString
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,10 +255,6 @@ namespace MusicBookingApp.Persistence.Migrations
 
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("BookingStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EventId")
                         .HasColumnType("nvarchar(450)");
